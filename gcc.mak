@@ -18,7 +18,7 @@ FC     = gfortran
 F77    = gfortran 
 
 OBJECTS = compbl.o blkdta.o derivs.o input.o macprc.o \
-nr_rk4.o getmat.o grid.o calc.o nr_spline.o
+nr_rk4.o getmat.o grid.o calc.o spline.o
 
 $(NAME): $(OBJECTS)
 	$(F77) $(OFLAGS) $(OBJECTS) $(LIB)
