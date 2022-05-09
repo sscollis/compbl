@@ -17,8 +17,12 @@ LIB    =
 FC     = gfortran 
 F77    = gfortran 
 
-OBJECTS = compbl.o blkdta.o derivs.o input.o macprc.o \
-nr_rk4.o getmat.o grid.o calc.o spline.o
+OBJECTS = compbl.o blkdta.o derivs.o input.o macprc.o getmat.o grid.o \
+					calc.o spline.o
+
+ifdef USE_NR
+	OBJECTS += nr_rk4.o
+endif
 
 $(NAME): $(OBJECTS)
 	$(F77) $(OFLAGS) $(OBJECTS) $(LIB)
