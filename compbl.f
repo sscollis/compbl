@@ -9,6 +9,8 @@ c
 c       I have coded the variable step routine, but using it messes up
 c       the trapezoid integration that I do to compute the layer thickness
 c
+c       So, for now make sure you compile with USE_RUNGE defined
+c
 c       Author: S. Scott Collis
 c
 c       Revised: 4-10-96
@@ -26,13 +28,17 @@ c
         dimension s1(NSTPMX), s2(NSTPMX),  s3(NSTPMX),  s4(NSTPMX)
         dimension x2(NSTPMX), zz(NSTPMX),  zs(NSTPMX)
 c
-        common /path/ xx(NSTPMX), y(NMAX,NSTPMX)
-c       common /path2/ kmax, kount, dxsav, xx(NSTPMX), y(NMAX,NSTPMX)
+#ifdef USE_RUNGE
+        common /NR_RUNGE_PATH/ xx(NSTPMX), y(NMAX,NSTPMX)
+#else
+        common /NR_ODEINT_PATH/ kmax, kount, dxsav, xx(NSTPMX), 
+     &                          y(NMAX,NSTPMX)
+#endif
         dimension ys(NMAX), key(2)
 c
         dimension eta(NSTPMX)
 c
-        external derivs, rkqc
+        external derivs, NR_RKQC
 c
 c.... spline integration
 c
@@ -108,11 +114,15 @@ c
 c
 c.... integrate
 c
-        call runge(y(1,1),n,xmin,xmax,nstep,derivs)
-c       call ODEINT(y(1,1),n,xmin,xmax,eps8,1.0d0,0.0d0,nok,nbad,derivs,rkqc)
-c       nstep = kount-1
-c       
-        write (*,20) iter, y(key(1),1), y(key(2),1), y(2,nstep+1), y(5,nstep+1)
+#ifdef USE_RUNGE
+        call NR_RUNGE(y(1,1),n,xmin,xmax,nstep,derivs)
+#else
+        call NR_ODEINT(y(1,1),n,xmin,xmax,eps8,1.0d0,0.0d0,nok,nbad,
+     &                 derivs,NR_RKQC)
+        nstep = kount-1
+#endif
+        write (*,20) iter, y(key(1),1), y(key(2),1), y(2,nstep+1), 
+     &               y(5,nstep+1)
  20     format(1p,i5,1x,4(e20.13,1x))
 c
 c.... Newton solve
@@ -125,11 +135,13 @@ c
         eps = sqrt(epsM)
         
         y(key(1),1) = (one + eps) * ys(key(1))
-
-        call runge(y(1,1),n,xmin,xmax,nstep,derivs)
-c       call ODEINT(y(1,1),n,xmin,xmax,eps8,1.0d0,0.0d0,nok,nbad,derivs,rkqc)
-c       nstep = kount-1
-
+#ifdef USE_RUNGE
+        call NR_RUNGE(y(1,1),n,xmin,xmax,nstep,derivs)
+#else
+        call NR_ODEINT(y(1,1),n,xmin,xmax,eps8,1.0d0,0.0d0,nok,nbad,
+     &                derivs,NR_RKQC)
+        nstep = kount-1
+#endif
         a11 = (y(2,nstep+1)-b1)/(eps*ys(key(1)))
         a21 = (y(5,nstep+1)-b2)/(eps*ys(key(1)))
 c
@@ -137,11 +149,13 @@ c.... Perturb y(5,1)
 c
         y(key(1),1) = ys(key(1))
         y(key(2),1) = (one + eps) * ys(key(2))
-        
-        call runge(y(1,1),n,xmin,xmax,nstep,derivs)
-c       call ODEINT(y(1,1),n,xmin,xmax,eps8,1.0d0,0.0d0,nok,nbad,derivs,rkqc)
-c       nstep = kount-1
-        
+#ifdef USE_RUNGE 
+        call NR_RUNGE(y(1,1),n,xmin,xmax,nstep,derivs)
+#else
+        call NR_ODEINT(y(1,1),n,xmin,xmax,eps8,1.0d0,0.0d0,nok,nbad,
+     &                 derivs,NR_RKQC)
+        nstep = kount-1
+#endif
         a12 = (y(2,nstep+1)-b1)/(eps*ys(key(2)))
         a22 = (y(5,nstep+1)-b2)/(eps*ys(key(2)))
 c
@@ -164,11 +178,16 @@ c
 c.... integrate one last time using the latest wall values
 c
         iter = iter + 1
-        call runge(y(1,1),n,xmin,xmax,nstep,derivs)
-c       call ODEINT(y(1,1),n,xmin,xmax,eps8,1.0d0,0.0d0,nok,nbad,derivs,rkqc)
-c       nstep = kount-1
+#ifdef USE_RUNGE
+        call NR_RUNGE(y(1,1),n,xmin,xmax,nstep,derivs)
+#else
+        call NR_ODEINT(y(1,1),n,xmin,xmax,eps8,1.0d0,0.0d0,nok,nbad,
+     &                 derivs,NR_RKQC)
+        nstep = kount-1
+#endif
 c       
-        write (*,20) iter, y(key(1),1), y(key(2),1), y(2,nstep+1), y(5,nstep+1)
+        write (*,20) iter, y(key(1),1), y(key(2),1), y(2,nstep+1), 
+     &               y(5,nstep+1)
 c
 c------------------------------------------------------------------------------
 c
@@ -249,7 +268,8 @@ c
           d3(i) = dv
           d4(i) = dT
 c
-          write (13,10) xx(i)*sqrt(2.0), q1(i), q2(i), q3(i), zero, q4(i)
+          write (13,10) xx(i)*sqrt(2.0), q1(i), q2(i), q3(i), zero, 
+     &                  q4(i)
 c
         end do
         close(13)
@@ -352,7 +372,7 @@ c
      &                      zero, dedy*d4(i)
           write (12,10) yi, dedy**2 * s1(i) + d2edy2 * d1(i), 
      &                      dedy**2 * s2(i) + d2edy2 * d2(i), 
-     &                      fact * ( dedy**2 * s3(i) + d2edy2 * d3(i) ), 
+     &                      fact * ( dedy**2 * s3(i) + d2edy2 * d3(i) ),
      &                      zero, 
      &                      dedy**2 * s4(i) + d2edy2 * d4(i)
         end do

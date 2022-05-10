@@ -36,7 +36,7 @@ c.... integrate
 c
         do i = 1, nstep-1
           call der(x(i),z(i),dz)
-          call rk4(z(i),dz,1,x(i),h,z(i+1),der)
+          call nr_rk4(z(i),dz,1,x(i),h,z(i+1),der)
 c         write(50,"(8(1pe13.6,1x))") x(i), z(i), etmp(i), gtmp(i)
           x(i+1) = x(i) + h
         end do

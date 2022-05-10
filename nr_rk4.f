@@ -1,7 +1,7 @@
 c------------------------------------------------------------------------------
 c.... Routines from Numerical Recipes
 c------------------------------------------------------------------------------
-      SUBROUTINE RK4(Y,DYDX,N,X,H,YOUT,DERIVS)
+      SUBROUTINE NR_RK4(Y,DYDX,N,X,H,YOUT,DERIVS)
 C     implicit double precision (a-h,o-z)
       PARAMETER (NMAX=5)
       DIMENSION Y(N),DYDX(N),YOUT(N),YT(NMAX),DYT(NMAX),DYM(NMAX)
@@ -28,10 +28,10 @@ C     implicit double precision (a-h,o-z)
       RETURN
       END
 c
-      SUBROUTINE RUNGE(VSTART,NVAR,X1,X2,NSTEP,DERIVS)
+      SUBROUTINE NR_RUNGE(VSTART,NVAR,X1,X2,NSTEP,DERIVS)
 C     implicit double precision (a-h,o-z)
       PARAMETER (NMAX=5,NSTPMX=5000)
-      COMMON /PATH/ XX(NSTPMX),Y(NMAX,NSTPMX)
+      COMMON /NR_RUNGE_PATH/ XX(NSTPMX),Y(NMAX,NSTPMX)
       DIMENSION VSTART(NVAR),V(NMAX),DV(NMAX)
       external derivs
       DO 11 I=1,NVAR
@@ -43,7 +43,7 @@ C     implicit double precision (a-h,o-z)
       H=(X2-X1)/NSTEP
       DO 13 K=1,NSTEP
         CALL DERIVS(X,V,DV)
-        CALL RK4(V,DV,NVAR,X,H,V,DERIVS)
+        CALL NR_RK4(V,DV,NVAR,X,H,V,DERIVS)
         IF(X+H.EQ.X)PAUSE 'Stepsize not significant in RKDUMB.'
         X=X+H
         XX(K+1)=X
@@ -54,11 +54,11 @@ C     implicit double precision (a-h,o-z)
       RETURN
       END
 
-      SUBROUTINE ODEINT(YSTART,NVAR,X1,X2,EPS,H1,HMIN,NOK,NBAD,DERIVS,
-     &                  RKQC)
+      SUBROUTINE NR_ODEINT(YSTART,NVAR,X1,X2,EPS,H1,HMIN,NOK,NBAD,DERIVS,
+     &                     RKQC)
 C     implicit double precision (a-h,o-z)
       PARAMETER (MAXSTP=5000,NMAX=5,TWO=2.0,ZERO=0.0,TINY=1.E-30)
-      COMMON /PATH2/ KMAX,KOUNT,DXSAV,XP(MAXSTP),YP(NMAX,MAXSTP)
+      COMMON /NR_ODEINT_PATH/ KMAX,KOUNT,DXSAV,XP(MAXSTP),YP(NMAX,MAXSTP)
       DIMENSION YSTART(NVAR),YSCAL(NMAX),Y(NMAX),DYDX(NMAX)
       external derivs, rkqc
       X=X1
@@ -116,7 +116,7 @@ c14        CONTINUE
       RETURN
       END
 
-      SUBROUTINE RKQC(Y,DYDX,N,X,HTRY,EPS,YSCAL,HDID,HNEXT,DERIVS)
+      SUBROUTINE NR_RKQC(Y,DYDX,N,X,HTRY,EPS,YSCAL,HDID,HNEXT,DERIVS)
 C     implicit double precision (a-h,o-z)
       PARAMETER (NMAX=5,FCOR=.0666666667,ONE=1.,SAFETY=0.9,ERRCON=6.E-4)
       EXTERNAL DERIVS
@@ -130,13 +130,13 @@ C     implicit double precision (a-h,o-z)
 11    CONTINUE
       H=HTRY
 1     HH=0.5*H
-      CALL RK4(YSAV,DYSAV,N,XSAV,HH,YTEMP,DERIVS)
+      CALL NR_RK4(YSAV,DYSAV,N,XSAV,HH,YTEMP,DERIVS)
       X=XSAV+HH
       CALL DERIVS(X,YTEMP,DYDX)
-      CALL RK4(YTEMP,DYDX,N,X,HH,Y,DERIVS)
+      CALL NR_RK4(YTEMP,DYDX,N,X,HH,Y,DERIVS)
       X=XSAV+H
       IF(X.EQ.XSAV)PAUSE 'Stepsize not significant in RKQC.'
-      CALL RK4(YSAV,DYSAV,N,XSAV,H,YTEMP,DERIVS)
+      CALL NR_RK4(YSAV,DYSAV,N,XSAV,H,YTEMP,DERIVS)
       ERRMAX=0.
       DO 12 I=1,N
         YTEMP(I)=Y(I)-YTEMP(I)

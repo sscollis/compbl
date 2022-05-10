@@ -43,12 +43,12 @@ c
 c
 c.... read the grid file
 c
-        open(unit=10,file='grid.dat',form='unformatted')
-        read(10) nx, ny, nz
+        open(unit=10,file='grid.dat',form='unformatted',err=1000)
+        read(10,err=1000) nx, ny, nz
         write(*,*) nx, ny, nz
-        read(10) (((x(i,j), i=1,nx), j=1,ny), k = 1, nz),
-     &           (((y(i,j), i=1,nx), j=1,ny), k = 1, nz),
-     &           (((   tmp, i=1,nx), j=1,ny), k = 1, nz)
+        read(10,err=1000) (((x(i,j), i=1,nx), j=1,ny), k = 1, nz),
+     &                    (((y(i,j), i=1,nx), j=1,ny), k = 1, nz),
+     &                    (((   tmp, i=1,nx), j=1,ny), k = 1, nz)
         close(10)
 c
 c.... spline the data
@@ -136,7 +136,8 @@ c
                  else
                     dy1 = y(i,j) - y(i,j-1)
                     dy2 = y(i,j+1) - y(i,j)
-                    deltap = deltap + pt5 * (dy1 + dy2) * (one - rhol * ul)
+                    deltap = deltap + pt5 * (dy1 + dy2) * (one - 
+     &                       rhol * ul)
                  end if
               end do
               write(10,"(8(1pe13.6,1x))") x(i,1), deltap/rnu,
@@ -146,4 +147,5 @@ c
         close(10)
 
         return
+ 1000   write(*,"('Error reading from file ',a,'$')") "grid.dat" 
         end
