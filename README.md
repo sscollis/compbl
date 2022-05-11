@@ -13,4 +13,3 @@ To build use:
 Note that the build with fail if you don't supply `nr_rk4.f`.
 
 S. Scott Collis\
-Sun May  8 15:58:55 MDT 2022
