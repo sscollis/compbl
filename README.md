@@ -1,4 +1,4 @@
-# Compressible Boundary Layer Solver
+# Compressible Boundary Layer Similarity Solver
 
 Solves the 2D compressible boundary-layer similarity equations.
 
@@ -41,9 +41,11 @@ File        |  Description
 `mean.dat`  | which is an LNS mean flow file
 `delta.dat` | displacement thickness as a function of `x`
 
-Note:
+Notes:
   1. I have noticed the use of the FORTRAN SNGL() function
      in writing the `bl.dat` and `mean.dat` files and this
      may need to be removed.
+  2. I'm so confident that these SNGL() need to be removed
+     I have done so but left the original lines as comments
 
 S. Scott Collis
