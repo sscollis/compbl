@@ -17,7 +17,7 @@ c
         real q(Nx_max,Ny_max,5)
         real Re, Ma, Pr, rgamma, cv
 
-        character*1 ans
+        character(1) ans
         logical temp
 c----------------------------------------------------------------------
         if (nstep.gt.NSTPMX) stop 'Increase NSTPMX in grid'
@@ -43,10 +43,11 @@ c
 c
 c.... read the grid file
 c
-        open(unit=10,file='grid.dat',form='unformatted',err=1000)
-        read(10,err=1000) nx, ny, nz
+        open(unit=10,file='grid.dat',form='unformatted',
+     &       action='read',status='old',err=1000)
+        read(10,err=1010) nx, ny, nz
         write(*,*) nx, ny, nz
-        read(10,err=1000) (((x(i,j), i=1,nx), j=1,ny), k = 1, nz),
+        read(10,err=1010) (((x(i,j), i=1,nx), j=1,ny), k = 1, nz),
      &                    (((y(i,j), i=1,nx), j=1,ny), k = 1, nz),
      &                    (((   tmp, i=1,nx), j=1,ny), k = 1, nz)
         close(10)
@@ -102,7 +103,8 @@ c
 c       
         open(unit=10,file='bl.dat',form='unformatted')
         write(10) nx, ny, nz
-        write(10) sngl(zero), sngl(zero), sngl(zero), sngl(zero)
+        write(10) zero, zero, zero, zero
+c       write(10) sngl(zero), sngl(zero), sngl(zero), sngl(zero)
         write(10) (((q(i,j,1), i=1,nx), j=1,ny), k = 1, nz),
      &            (((q(i,j,2), i=1,nx), j=1,ny), k = 1, nz),
      &            (((q(i,j,3), i=1,nx), j=1,ny), k = 1, nz),
@@ -114,7 +116,8 @@ c.... write out an LNS mean.dat file
 c
         open(unit=10,file='mean.dat',form='unformatted')
         write(*,*) 0, sngl(zero), nx, ny, nz, 5, Re, Ma, Pr, rgamma, cv
-        write(10) 0, sngl(zero), nx, ny, nz, 5, Re, Ma, Pr, rgamma, cv
+        write(10) 0, zero, nx, ny, nz, 5, Re, Ma, Pr, rgamma, cv
+c       write(10) 0, sngl(zero), nx, ny, nz, 5, Re, Ma, Pr, rgamma, cv
         write(10) (((q(i,j,k), j=1,ny), i=1,nx), k=1,5)
         close(10)       
 c
@@ -147,5 +150,8 @@ c
         close(10)
 
         return
- 1000   write(*,"('Error reading from file ',a,'$')") "grid.dat" 
+ 1000   write(*,"('Error opening file ',a)") "grid.dat" 
+        call exit(1)
+ 1010   write(*,"('Error reading from file ',a)") "grid.dat" 
+        call exit(1)
         end

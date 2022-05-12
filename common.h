@@ -6,7 +6,8 @@ c other than in this file.
 c
 c----------------------------------------------------------------------
 c
-	implicit double precision (a-h,o-z)
+c	implicit double precision (a-h,o-z)
+	implicit real (a-h,o-z)
 c
 	common /const / zero,   pt25,    pt33,    pt5,   pt66,   one,    
      &			onept5, two,     three,   four,  sixten, eps7,

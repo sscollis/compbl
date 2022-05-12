@@ -11,15 +11,17 @@ NAME    = compbl
 OPT     = -O2 
 DEBUG   = -g
 FFLAGS  = -cpp -fdefault-real-8 -fdefault-double-8 -ffixed-line-length-120 \
-          -std=legacy -c $(OPT) $(DEBUG)
+          -std=legacy -ffpe-trap=invalid,zero,overflow -ffpe-summary=none \
+          -c $(OPT) $(DEBUG)
 DEFINES = -DUSE_RUNGE
 OFLAGS  = $(OPT) $(DEBUG) -o $(NAME)
 LIB     =
 FC      = gfortran 
 F77     = gfortran 
-
+#
+# Default is currently to use Numerical-Recipes (if you have a valid license)
+#
 USE_NR  = 1
-
 ifdef USE_NR
   ifeq ($(LIBNR_DIR),)
     LIBNR_DIR = $(HOME)/git/NR-utilities

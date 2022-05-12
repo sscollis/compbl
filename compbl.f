@@ -46,7 +46,7 @@ c
         common /yes/ ww, g, gs, num
         external der
 
-        character*1 ans
+        character(1) ans
 c------------------------------------------------------------------------------
         kmax  = NSTPMX
         dxsav = 0.0
@@ -352,7 +352,8 @@ c
         open(10,file='profile.dat')
         open(11,file='first.dat')
         open(12,file='second.dat')
-        write (10,*) 1, nstep+1, 5, yi
+        write(10,80) 1, nstep+1, 5, yi
+ 80     format ('# ',3(i5,1x),1pe20.13)
 
         do i = 1, nstep + 1
           call SPEVAL (nstep+1,x2,zz,zs,xx(i),zi)
