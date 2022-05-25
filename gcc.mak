@@ -4,11 +4,11 @@
 #
 #  Author:  Scott Collis
 #
-#  Revised: 2-12-2020 
+#  Revised: 2-12-2020
 #
 #==============================================================================
 NAME    = compbl
-OPT     = -O2 
+OPT     = -O2
 DEBUG   = -g
 FFLAGS  = -cpp -fdefault-real-8 -fdefault-double-8 -ffixed-line-length-120 \
           -std=legacy -ffpe-trap=invalid,zero,overflow -ffpe-summary=none \
@@ -16,8 +16,8 @@ FFLAGS  = -cpp -fdefault-real-8 -fdefault-double-8 -ffixed-line-length-120 \
 DEFINES = -DUSE_RUNGE
 OFLAGS  = $(OPT) $(DEBUG) -o $(NAME)
 LIB     =
-FC      = gfortran 
-F77     = gfortran 
+FC      = gfortran
+F77     = gfortran
 #
 # Default is currently to use Numerical-Recipes (if you have a valid license)
 #
@@ -26,7 +26,7 @@ ifdef USE_NR
   ifeq ($(LIBNR_DIR),)
     LIBNR_DIR = $(HOME)/git/NR-utilities
   endif
-  LIB += -L$(LIBNR_DIR) -lnr 
+  LIB += -L$(LIBNR_DIR) -lnr
 else
   $(error Currently must link with Numerical-Recipes)
 endif

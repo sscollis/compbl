@@ -19,7 +19,7 @@ c
 c.... Constant mu
 c
         if (mattyp .eq. 0) then
-          write (*,10) 
+          write (*,10)
  10       format(/,'Enter the viscosity ==> ',$)
           read (*,*) datmat(1)
         else
@@ -31,22 +31,26 @@ c.... changed to match N. Adams 1-24-95
 c
           datmat(1) = 1.715336725523065e-05     ! 1.716e-5
           datmat(2) = 273.0
-          datmat(3) = 110.4                     ! 111.0 
+          datmat(3) = 110.4                     ! 111.0
         end if
 c
 c.... Freestream Mach number
 c
         write (*,20)
  20     format(/,'Enter the Mach number ==> ',$)
-        read (*,*) rMach 
+        read (*,*) rMach
         Te = T0 / (one + gamma1 * pt5 * rMach**2)
+c
+c.... Prandtl number
+c
+        write (*,21)
+ 21     format(/,'Enter the Prandtl number ==> ',$)
+        read (*,*) Pr
 c
 c.... Falkner-Skan type parameter (beta = zero for a flate plate)
 c
         write (*,"(/,'Enter beta ==> ',$)")
         read(*,*) beta
-c
-c       beta = zero
 c
 c.... Echo input
 c
@@ -60,4 +64,3 @@ c
 
         return
         end
-
