@@ -419,7 +419,7 @@ c
 c
 c.... format statements
 c
- 10     format (1p,7(e20.13,1x))
+ 10     format(1p,7(e20.13,1x))
 c
         stop
         end
