@@ -376,7 +376,7 @@ c
           fact = sqrt( pt5 * rnu / xv )
 
           write (10,10) yi, q1(i), q2(i), fact * q3(i), zero, q4(i)
-          write (11,10) yi, dedy*d1(i), fact * dedy*d2(i), dedy*d3(i),
+          write (11,10) yi, dedy*d1(i), dedy*d2(i), fact*dedy*d3(i),
      &                      zero, dedy*d4(i)
           write (12,10) yi, dedy**2 * s1(i) + d2edy2 * d1(i),
      &                      dedy**2 * s2(i) + d2edy2 * d2(i),
