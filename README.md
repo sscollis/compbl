@@ -34,8 +34,8 @@ The input file itself is a flat text file of the form:
 0.001   ! Viscosity, mu (makes delta=1)
 0.3     ! Mach number
 1.0     ! Prandtl number
-0.0     ! Beta
-1000    ! Re_delta
+0.0     ! Beta (Falkner-Skan parameter), 0=flat plate
+1000    ! Re_delta (virtual origin)
 n       ! write on a grid (y,n)
 t       ! (t)emporal or (s)patial
 ```
