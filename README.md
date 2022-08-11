@@ -1,4 +1,4 @@
-# Compressible Boundary Layer Similarity Solver
+# COMPBL:  Compressible Boundary Layer Similarity Solver
 
 Solves the 2D compressible boundary-layer similarity equations.  Note that
 this is a much simplier implementation than the Falkner-Skan-Cooke 
