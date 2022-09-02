@@ -8,11 +8,13 @@ c----------------------------------------------------------------------
 c
         dimension zz(nstep), rho(nstep), u(nstep), v(nstep), t(nstep)
         
-        parameter (NSTPMX=5000)
+c       parameter (NSTPMX=5000)
+        parameter (NSTPMX=1000)
         dimension rhos(NSTPMX), us(NSTPMX), vs(NSTPMX), 
      &            ts(NSTPMX),   zs(NSTPMX)
 
-        parameter (Nx_max=512,Ny_max=512)
+c       parameter (Nx_max=512,Ny_max=512)
+        parameter (Nx_max=256,Ny_max=256)
         real x(Nx_max,Ny_max), y(Nx_max,Ny_max), tmp
         real q(Nx_max,Ny_max,5)
         real Re, Ma, Pr, rgamma, cv
