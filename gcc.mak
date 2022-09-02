@@ -21,14 +21,14 @@ F77     = gfortran
 #
 # Default is currently to use Numerical-Recipes (if you have a valid license)
 #
-USE_NR  = 1
+#USE_NR  = 1
 ifdef USE_NR
   ifeq ($(LIBNR_DIR),)
     LIBNR_DIR = $(HOME)/git/NR-utilities
   endif
   LIB += -L$(LIBNR_DIR) -lnr
 else
-  $(error Currently must link with Numerical-Recipes)
+  $(error Currently must build with Numerical-Recipes)
 endif
 
 OBJECTS = compbl.o blkdta.o derivs.o input.o macprc.o \
